@@ -170,6 +170,45 @@ func (e Lt) Linearise(h Handler, b []byte, args []interface{}) ([]byte, []interf
 	return h.NextPlaceholder(b), append(args, e.Value)
 }
 
+// Lte is an AST node for representing the "less than or equal" comparison operation.
+type Lte struct {
+	Ident string
+	Value interface{}
+}
+
+// Linearise linearises the AST.
+func (e Lte) Linearise(h Handler, b []byte, args []interface{}) ([]byte, []interface{}) {
+	b = append(b, e.Ident...)
+	b = append(b, " <= "...)
+	return h.NextPlaceholder(b), append(args, e.Value)
+}
+
+// Gt is an AST node for representing the "greater than" comparison operation.
+type Gt struct {
+	Ident string
+	Value interface{}
+}
+
+// Linearise linearises the AST.
+func (e Gt) Linearise(h Handler, b []byte, args []interface{}) ([]byte, []interface{}) {
+	b = append(b, e.Ident...)
+	b = append(b, " > "...)
+	return h.NextPlaceholder(b), append(args, e.Value)
+}
+
+// Gte is an AST node for representing the "greater than or equal" comparison operation.
+type Gte struct {
+	Ident string
+	Value interface{}
+}
+
+// Linearise linearises the AST.
+func (e Gte) Linearise(h Handler, b []byte, args []interface{}) ([]byte, []interface{}) {
+	b = append(b, e.Ident...)
+	b = append(b, " >= "...)
+	return h.NextPlaceholder(b), append(args, e.Value)
+}
+
 var (
 	_ Expr = Eq{}
 	_ Expr = Neq{}

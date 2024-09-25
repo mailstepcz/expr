@@ -87,3 +87,39 @@ func TestIsNotNullAny(t *testing.T) {
 	req.Equal("Var IS NOT NULL", nocopy.String(b))
 	req.Equal([]interface{}(nil), args)
 }
+
+func TestLt(t *testing.T) {
+	req := require.New(t)
+
+	e := Lt{Ident: "Var", Value: 1234}
+	b, args := new(PostgresHandler).ToSQL(e, nil, nil)
+	req.Equal("Var < $1", nocopy.String(b))
+	req.Equal([]interface{}{1234}, args)
+}
+
+func TestLte(t *testing.T) {
+	req := require.New(t)
+
+	e := Lte{Ident: "Var", Value: 1234}
+	b, args := new(PostgresHandler).ToSQL(e, nil, nil)
+	req.Equal("Var <= $1", nocopy.String(b))
+	req.Equal([]interface{}{1234}, args)
+}
+
+func TestGt(t *testing.T) {
+	req := require.New(t)
+
+	e := Gt{Ident: "Var", Value: 1234}
+	b, args := new(PostgresHandler).ToSQL(e, nil, nil)
+	req.Equal("Var > $1", nocopy.String(b))
+	req.Equal([]interface{}{1234}, args)
+}
+
+func TestGte(t *testing.T) {
+	req := require.New(t)
+
+	e := Gte{Ident: "Var", Value: 1234}
+	b, args := new(PostgresHandler).ToSQL(e, nil, nil)
+	req.Equal("Var >= $1", nocopy.String(b))
+	req.Equal([]interface{}{1234}, args)
+}
