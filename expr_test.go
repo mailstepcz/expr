@@ -70,6 +70,19 @@ func TestOr(t *testing.T) {
 	req.Equal([]interface{}{1, 2, 3}, args)
 }
 
+func TestContains(t *testing.T) {
+	req := require.New(t)
+
+	e := Or{[]Expr{
+		Contains{Ident: "Var1", Value: 1},
+		Contains{Ident: "Var2", Value: 2},
+		Contains{Ident: "Var3", Value: 3},
+	}}
+	b, args := new(PostgresHandler).ToSQL(e, nil, nil)
+	req.Equal("($1 = ANY(Var1) OR $2 = ANY(Var2) OR $3 = ANY(Var3))", nocopy.String(b))
+	req.Equal([]interface{}{1, 2, 3}, args)
+}
+
 func TestIsNullAny(t *testing.T) {
 	req := require.New(t)
 

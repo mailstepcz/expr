@@ -209,6 +209,20 @@ func (e Gte) Linearise(h Handler, b []byte, args []interface{}) ([]byte, []inter
 	return h.NextPlaceholder(b), append(args, e.Value)
 }
 
+// Contains is an AST node for representing the "slice contains" comparison operation
+type Contains struct {
+	Ident string
+	Value interface{}
+}
+
+// Linearise linearises the AST.
+func (e Contains) Linearise(h Handler, b []byte, args []interface{}) ([]byte, []interface{}) {
+	b = h.NextPlaceholder(b)
+	b = append(b, " = ANY("...)
+	b = append(b, e.Ident...)
+	return append(b, ')'), append(args, e.Value)
+}
+
 var (
 	_ Expr = Eq{}
 	_ Expr = Neq{}
@@ -218,6 +232,7 @@ var (
 	_ Expr = IsNull{}
 	_ Expr = IsNotNull{}
 	_ Expr = Lt{}
+	_ Expr = Contains{}
 
 	_ Handler = (*PostgresHandler)(nil)
 )
