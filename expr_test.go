@@ -13,7 +13,7 @@ func TestEq(t *testing.T) {
 
 	e := Eq{Ident: "Var", Value: 1234}
 	b, args := new(PostgresHandler).ToSQL(e, nil, nil)
-	req.Equal("Var = $1", nocopy.String(b))
+	req.Equal("\"Var\" = $1", nocopy.String(b))
 	req.Equal([]interface{}{1234}, args)
 }
 
@@ -22,7 +22,7 @@ func TestNeq(t *testing.T) {
 
 	e := Neq{Ident: "Var", Value: 1234}
 	b, args := new(PostgresHandler).ToSQL(e, nil, nil)
-	req.Equal("Var <> $1", nocopy.String(b))
+	req.Equal("\"Var\" <> $1", nocopy.String(b))
 	req.Equal([]interface{}{1234}, args)
 }
 
@@ -31,7 +31,7 @@ func TestEqAny(t *testing.T) {
 
 	e := EqAny{Ident: "Var", Values: []interface{}{1, 2, 3}}
 	b, args := new(PostgresHandler).ToSQL(e, nil, nil)
-	req.Equal("Var = ANY($1)", nocopy.String(b))
+	req.Equal("\"Var\" = ANY($1)", nocopy.String(b))
 	req.Equal([]interface{}{pq.Array([]interface{}{1, 2, 3})}, args)
 }
 
@@ -40,7 +40,7 @@ func TestNeqAll(t *testing.T) {
 
 	e := NeqAll{Ident: "Var", Values: []interface{}{1, 2, 3}}
 	b, args := new(PostgresHandler).ToSQL(e, nil, nil)
-	req.Equal("Var <> ALL($1)", nocopy.String(b))
+	req.Equal("\"Var\" <> ALL($1)", nocopy.String(b))
 	req.Equal([]interface{}{pq.Array([]interface{}{1, 2, 3})}, args)
 }
 
@@ -53,7 +53,7 @@ func TestAnd(t *testing.T) {
 		Eq{Ident: "Var3", Value: 3},
 	}}
 	b, args := new(PostgresHandler).ToSQL(e, nil, nil)
-	req.Equal("(Var1 = $1 AND Var2 = $2 AND Var3 = $3)", nocopy.String(b))
+	req.Equal("(\"Var1\" = $1 AND \"Var2\" = $2 AND \"Var3\" = $3)", nocopy.String(b))
 	req.Equal([]interface{}{1, 2, 3}, args)
 }
 
@@ -66,7 +66,7 @@ func TestOr(t *testing.T) {
 		Eq{Ident: "Var3", Value: 3},
 	}}
 	b, args := new(PostgresHandler).ToSQL(e, nil, nil)
-	req.Equal("(Var1 = $1 OR Var2 = $2 OR Var3 = $3)", nocopy.String(b))
+	req.Equal("(\"Var1\" = $1 OR \"Var2\" = $2 OR \"Var3\" = $3)", nocopy.String(b))
 	req.Equal([]interface{}{1, 2, 3}, args)
 }
 
@@ -79,7 +79,7 @@ func TestContains(t *testing.T) {
 		Contains{Ident: "Var3", Value: 3},
 	}}
 	b, args := new(PostgresHandler).ToSQL(e, nil, nil)
-	req.Equal("($1 = ANY(Var1) OR $2 = ANY(Var2) OR $3 = ANY(Var3))", nocopy.String(b))
+	req.Equal("($1 = ANY(\"Var1\") OR $2 = ANY(\"Var2\") OR $3 = ANY(\"Var3\"))", nocopy.String(b))
 	req.Equal([]interface{}{1, 2, 3}, args)
 }
 
@@ -88,7 +88,7 @@ func TestIsNullAny(t *testing.T) {
 
 	e := IsNull{Ident: "Var"}
 	b, args := new(PostgresHandler).ToSQL(e, nil, nil)
-	req.Equal("Var IS NULL", nocopy.String(b))
+	req.Equal("\"Var\" IS NULL", nocopy.String(b))
 	req.Equal([]interface{}(nil), args)
 }
 
@@ -97,7 +97,7 @@ func TestIsNotNullAny(t *testing.T) {
 
 	e := IsNotNull{Ident: "Var"}
 	b, args := new(PostgresHandler).ToSQL(e, nil, nil)
-	req.Equal("Var IS NOT NULL", nocopy.String(b))
+	req.Equal("\"Var\" IS NOT NULL", nocopy.String(b))
 	req.Equal([]interface{}(nil), args)
 }
 
@@ -106,7 +106,7 @@ func TestLt(t *testing.T) {
 
 	e := Lt{Ident: "Var", Value: 1234}
 	b, args := new(PostgresHandler).ToSQL(e, nil, nil)
-	req.Equal("Var < $1", nocopy.String(b))
+	req.Equal("\"Var\" < $1", nocopy.String(b))
 	req.Equal([]interface{}{1234}, args)
 }
 
@@ -115,7 +115,7 @@ func TestLte(t *testing.T) {
 
 	e := Lte{Ident: "Var", Value: 1234}
 	b, args := new(PostgresHandler).ToSQL(e, nil, nil)
-	req.Equal("Var <= $1", nocopy.String(b))
+	req.Equal("\"Var\" <= $1", nocopy.String(b))
 	req.Equal([]interface{}{1234}, args)
 }
 
@@ -124,7 +124,7 @@ func TestGt(t *testing.T) {
 
 	e := Gt{Ident: "Var", Value: 1234}
 	b, args := new(PostgresHandler).ToSQL(e, nil, nil)
-	req.Equal("Var > $1", nocopy.String(b))
+	req.Equal("\"Var\" > $1", nocopy.String(b))
 	req.Equal([]interface{}{1234}, args)
 }
 
@@ -133,6 +133,6 @@ func TestGte(t *testing.T) {
 
 	e := Gte{Ident: "Var", Value: 1234}
 	b, args := new(PostgresHandler).ToSQL(e, nil, nil)
-	req.Equal("Var >= $1", nocopy.String(b))
+	req.Equal("\"Var\" >= $1", nocopy.String(b))
 	req.Equal([]interface{}{1234}, args)
 }
