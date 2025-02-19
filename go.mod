@@ -3,7 +3,7 @@ module github.com/mailstepcz/expr
 go 1.22.0
 
 require (
-	github.com/fealsamh/go-utils v0.1.38
+	github.com/fealsamh/go-utils v0.1.41
 	github.com/lib/pq v1.10.9
 	github.com/stretchr/testify v1.10.0
 )

@@ -2,6 +2,8 @@ github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/fealsamh/go-utils v0.1.38 h1:lhUIr1BEQwaXOxzvkr2nTtMHol05iHWmy+xUiG8XhPA=
 github.com/fealsamh/go-utils v0.1.38/go.mod h1:IzXKfD6G/SAhwtcVHs63wtDhphghjdjUA9nrZf476Fo=
+github.com/fealsamh/go-utils v0.1.41 h1:xXrDTlBKTQUdz9BqUCSoOzhyeN8zgGqLYnsz/pyoHqc=
+github.com/fealsamh/go-utils v0.1.41/go.mod h1:nZ816kx5VPK5yNYppMZ8nn5PP3Ak3VVZQtwcUfLkPMo=
 github.com/lib/pq v1.10.9 h1:YXG7RB+JIjhP29X+OtkiDnYaXQwpS4JEWq7dtCCRUEw=
 github.com/lib/pq v1.10.9/go.mod h1:AlVN5x4E4T544tWzH6hKfbfQvm3HdbOxrmggDNAPY9o=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
