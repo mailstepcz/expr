@@ -2,6 +2,7 @@ package expr
 
 import (
 	"strconv"
+	"strings"
 
 	"github.com/lib/pq"
 )
@@ -40,6 +41,16 @@ func (h *PostgresHandler) ToSQL(e Expr, b []byte, args []interface{}) ([]byte, [
 	return e.Linearise(h, b, args)
 }
 
+func appendIdent(b []byte, ident string) []byte {
+	for i, c := range strings.Split(ident, ".") {
+		if i > 0 {
+			b = append(b, '.')
+		}
+		b = strconv.AppendQuote(b, c)
+	}
+	return b
+}
+
 // Expr is an AST node representing an expression.
 type Expr interface {
 	Linearise(Handler, []byte, []interface{}) ([]byte, []interface{})
@@ -53,7 +64,7 @@ type Eq struct {
 
 // Linearise linearises the AST.
 func (e Eq) Linearise(h Handler, b []byte, args []interface{}) ([]byte, []interface{}) {
-	b = strconv.AppendQuote(b, e.Ident)
+	b = appendIdent(b, e.Ident)
 	b = append(b, " = "...)
 	return h.NextPlaceholder(b), append(args, e.Value)
 }
@@ -66,7 +77,7 @@ type Neq struct {
 
 // Linearise linearises the AST.
 func (e Neq) Linearise(h Handler, b []byte, args []interface{}) ([]byte, []interface{}) {
-	b = strconv.AppendQuote(b, e.Ident)
+	b = appendIdent(b, e.Ident)
 	b = append(b, " <> "...)
 	return h.NextPlaceholder(b), append(args, e.Value)
 }
@@ -79,7 +90,7 @@ type EqAny struct {
 
 // Linearise linearises the AST.
 func (e EqAny) Linearise(h Handler, b []byte, args []interface{}) ([]byte, []interface{}) {
-	b = strconv.AppendQuote(b, e.Ident)
+	b = appendIdent(b, e.Ident)
 	b = append(b, " = ANY("...)
 	b = h.NextPlaceholder(b)
 	return append(b, ')'), append(args, h.WrapSlice(e.Values))
@@ -93,7 +104,7 @@ type NeqAll struct {
 
 // Linearise linearises the AST.
 func (e NeqAll) Linearise(h Handler, b []byte, args []interface{}) ([]byte, []interface{}) {
-	b = strconv.AppendQuote(b, e.Ident)
+	b = appendIdent(b, e.Ident)
 	b = append(b, " <> ALL("...)
 	b = h.NextPlaceholder(b)
 	return append(b, ')'), append(args, h.WrapSlice(e.Values))
@@ -140,7 +151,7 @@ type IsNull struct {
 
 // Linearise linearises the AST.
 func (e IsNull) Linearise(h Handler, b []byte, args []interface{}) ([]byte, []interface{}) {
-	b = strconv.AppendQuote(b, e.Ident)
+	b = appendIdent(b, e.Ident)
 	b = append(b, " IS NULL"...)
 	return b, args
 }
@@ -152,7 +163,7 @@ type IsNotNull struct {
 
 // Linearise linearises the AST.
 func (e IsNotNull) Linearise(h Handler, b []byte, args []interface{}) ([]byte, []interface{}) {
-	b = strconv.AppendQuote(b, e.Ident)
+	b = appendIdent(b, e.Ident)
 	b = append(b, " IS NOT NULL"...)
 	return b, args
 }
@@ -165,7 +176,7 @@ type Lt struct {
 
 // Linearise linearises the AST.
 func (e Lt) Linearise(h Handler, b []byte, args []interface{}) ([]byte, []interface{}) {
-	b = strconv.AppendQuote(b, e.Ident)
+	b = appendIdent(b, e.Ident)
 	b = append(b, " < "...)
 	return h.NextPlaceholder(b), append(args, e.Value)
 }
@@ -178,7 +189,7 @@ type Lte struct {
 
 // Linearise linearises the AST.
 func (e Lte) Linearise(h Handler, b []byte, args []interface{}) ([]byte, []interface{}) {
-	b = strconv.AppendQuote(b, e.Ident)
+	b = appendIdent(b, e.Ident)
 	b = append(b, " <= "...)
 	return h.NextPlaceholder(b), append(args, e.Value)
 }
@@ -191,7 +202,7 @@ type Gt struct {
 
 // Linearise linearises the AST.
 func (e Gt) Linearise(h Handler, b []byte, args []interface{}) ([]byte, []interface{}) {
-	b = strconv.AppendQuote(b, e.Ident)
+	b = appendIdent(b, e.Ident)
 	b = append(b, " > "...)
 	return h.NextPlaceholder(b), append(args, e.Value)
 }
@@ -204,7 +215,7 @@ type Gte struct {
 
 // Linearise linearises the AST.
 func (e Gte) Linearise(h Handler, b []byte, args []interface{}) ([]byte, []interface{}) {
-	b = strconv.AppendQuote(b, e.Ident)
+	b = appendIdent(b, e.Ident)
 	b = append(b, " >= "...)
 	return h.NextPlaceholder(b), append(args, e.Value)
 }
@@ -219,7 +230,7 @@ type Contains struct {
 func (e Contains) Linearise(h Handler, b []byte, args []interface{}) ([]byte, []interface{}) {
 	b = h.NextPlaceholder(b)
 	b = append(b, " = ANY("...)
-	b = strconv.AppendQuote(b, e.Ident)
+	b = appendIdent(b, e.Ident)
 	return append(b, ')'), append(args, e.Value)
 }
 

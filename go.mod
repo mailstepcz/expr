@@ -1,10 +1,13 @@
 module github.com/mailstepcz/expr
 
-go 1.22.0
+go 1.24
+
+toolchain go1.24.0
 
 require (
 	github.com/fealsamh/go-utils v0.1.41
 	github.com/lib/pq v1.10.9
+	github.com/mailstepcz/testutils v0.1.5
 	github.com/stretchr/testify v1.10.0
 )
 
