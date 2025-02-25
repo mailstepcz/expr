@@ -5,8 +5,17 @@ import (
 
 	"github.com/fealsamh/go-utils/nocopy"
 	"github.com/lib/pq"
+	"github.com/mailstepcz/testutils/testcond"
 	"github.com/stretchr/testify/require"
 )
+
+func TestAppendIdent(t *testing.T) {
+	b := appendIdent(nil, "abcd")
+	testcond.Equal(t, `"abcd"`, string(b))
+
+	b = appendIdent(nil, "ab.cd")
+	testcond.Equal(t, `"ab"."cd"`, string(b))
+}
 
 func TestEq(t *testing.T) {
 	req := require.New(t)
