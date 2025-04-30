@@ -3,7 +3,7 @@ package expr
 import (
 	"testing"
 
-	"github.com/fealsamh/go-utils/nocopy"
+	"github.com/mailstepcz/go-utils/nocopy"
 	"github.com/lib/pq"
 	"github.com/mailstepcz/testutils/testcond"
 	"github.com/stretchr/testify/require"
