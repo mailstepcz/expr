@@ -3,8 +3,8 @@ package expr
 import (
 	"testing"
 
-	"github.com/mailstepcz/go-utils/nocopy"
 	"github.com/lib/pq"
+	"github.com/mailstepcz/go-utils/nocopy"
 	"github.com/mailstepcz/testutils/testcond"
 	"github.com/stretchr/testify/require"
 )
@@ -144,4 +144,29 @@ func TestGte(t *testing.T) {
 	b, args := new(PostgresHandler).ToSQL(e, nil, nil)
 	req.Equal("\"Var\" >= $1", nocopy.String(b))
 	req.Equal([]interface{}{1234}, args)
+}
+
+func TestNot(t *testing.T) {
+	req := require.New(t)
+
+	e := Not{
+		Eq{Ident: "Var1", Value: 1}}
+	b, args := new(PostgresHandler).ToSQL(e, nil, nil)
+	req.Equal("NOT (\"Var1\" = $1)", nocopy.String(b))
+	req.Equal([]interface{}{1}, args)
+}
+
+func TestNot2(t *testing.T) {
+	req := require.New(t)
+
+	e := Not{
+		Or{[]Expr{
+			Eq{Ident: "Var1", Value: 1},
+			Eq{Ident: "Var2", Value: 2},
+			Eq{Ident: "Var3", Value: 3},
+		}}}
+
+	b, args := new(PostgresHandler).ToSQL(e, nil, nil)
+	req.Equal("NOT ((\"Var1\" = $1 OR \"Var2\" = $2 OR \"Var3\" = $3))", nocopy.String(b))
+	req.Equal([]interface{}{1, 2, 3}, args)
 }
