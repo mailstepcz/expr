@@ -234,6 +234,18 @@ func (e Contains) Linearise(h Handler, b []byte, args []interface{}) ([]byte, []
 	return append(b, ')'), append(args, e.Value)
 }
 
+// Not is an AST node for negation.
+type Not struct {
+	Expr Expr
+}
+
+// Linearise linearises the AST.
+func (e Not) Linearise(h Handler, b []byte, args []interface{}) ([]byte, []interface{}) {
+	b = append(b, "NOT ("...)
+	b, args = e.Expr.Linearise(h, b, args)
+	return append(b, ')'), args
+}
+
 var (
 	_ Expr = Eq{}
 	_ Expr = Neq{}
@@ -244,6 +256,7 @@ var (
 	_ Expr = IsNotNull{}
 	_ Expr = Lt{}
 	_ Expr = Contains{}
+	_ Expr = Not{}
 
 	_ Handler = (*PostgresHandler)(nil)
 )
