@@ -246,6 +246,19 @@ func (e Not) Linearise(h Handler, b []byte, args []interface{}) ([]byte, []inter
 	return append(b, ')'), args
 }
 
+// Match is an AST node for regex matching.
+type Match struct {
+	Ident string
+	Value interface{}
+}
+
+// Linearise linearises the AST.
+func (e Match) Linearise(h Handler, b []byte, args []interface{}) ([]byte, []interface{}) {
+	b = appendIdent(b, e.Ident)
+	b = append(b, " ~ "...)
+	return h.NextPlaceholder(b), append(args, e.Value)
+}
+
 var (
 	_ Expr = Eq{}
 	_ Expr = Neq{}
@@ -257,6 +270,7 @@ var (
 	_ Expr = Lt{}
 	_ Expr = Contains{}
 	_ Expr = Not{}
+	_ Expr = Match{}
 
 	_ Handler = (*PostgresHandler)(nil)
 )

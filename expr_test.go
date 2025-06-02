@@ -170,3 +170,15 @@ func TestNot2(t *testing.T) {
 	req.Equal("NOT ((\"Var1\" = $1 OR \"Var2\" = $2 OR \"Var3\" = $3))", nocopy.String(b))
 	req.Equal([]interface{}{1, 2, 3}, args)
 }
+
+func TestMatch(t *testing.T) {
+	req := require.New(t)
+
+	e := Match{
+		Ident: "name",
+		Value: "^john",
+	}
+	b, args := new(PostgresHandler).ToSQL(e, nil, nil)
+	req.Equal("\"name\" ~ $1", nocopy.String(b))
+	req.Equal([]interface{}{"^john"}, args)
+}
