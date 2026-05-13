@@ -259,6 +259,19 @@ func (e Match) Linearise(h Handler, b []byte, args []interface{}) ([]byte, []int
 	return h.NextPlaceholder(b), append(args, e.Value)
 }
 
+// ArrayOverlap is an AST node for PostgreSQL array overlap (&&).
+type ArrayOverlap struct {
+	Ident string
+	Value interface{}
+}
+
+// Linearise linearises the AST.
+func (e ArrayOverlap) Linearise(h Handler, b []byte, args []interface{}) ([]byte, []interface{}) {
+	b = appendIdent(b, e.Ident)
+	b = append(b, " && "...)
+	return h.NextPlaceholder(b), append(args, e.Value)
+}
+
 var (
 	_ Expr = Eq{}
 	_ Expr = Neq{}
@@ -271,6 +284,7 @@ var (
 	_ Expr = Contains{}
 	_ Expr = Not{}
 	_ Expr = Match{}
+	_ Expr = ArrayOverlap{}
 
 	_ Handler = (*PostgresHandler)(nil)
 )
