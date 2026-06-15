@@ -182,3 +182,12 @@ func TestMatch(t *testing.T) {
 	req.Equal("\"name\" ~ $1", nocopy.String(b))
 	req.Equal([]interface{}{"^john"}, args)
 }
+
+func TestArrayOverlap(t *testing.T) {
+	req := require.New(t)
+
+	e := ArrayOverlap{Ident: "Var", Value: pq.Array([]int{1, 2, 3})}
+	b, args := new(PostgresHandler).ToSQL(e, nil, nil)
+	req.Equal("\"Var\" && $1", nocopy.String(b))
+	req.Equal([]interface{}{pq.Array([]int{1, 2, 3})}, args)
+}
